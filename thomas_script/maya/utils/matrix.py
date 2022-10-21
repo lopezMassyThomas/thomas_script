@@ -112,3 +112,52 @@ def matrixConstraint_old(parent, child, mo=True, t=True, ro=True, s=True):
           
         mc.disconnectAttr('{}.outputRotate'.format(decompose), '{}.rotate'.format(child))
         mc.connectAttr('{}.outputRotate'.format(decomposeJO), '{}.rotate'.format(child))   
+    
+def matConstrSelected(*args):
+    sel = mc.ls(sl=True)
+    if len(sel) != 2:
+        print 'Select first the parent then the child.'
+        return
+    print mc.checkBox(moCheck, query=True, value=True)
+    print mc.checkBox(l='Translate', query=True, value=True)
+    print mc.checkBox(l='Rotate', query=True, value=True)
+    print mc.checkBox(l='Scale', query=True, value=True)
+    print matrixConstraint_old(sel[0], sel[1], mo=True, t=True, ro=True, s=True)
+    return
+
+def showWindow():
+    # Create a window using the cmds.window command
+    # give it a title, icon and dimensions
+    window = mc.window( title="MatrixConstraint", iconName='matConstr', widthHeight=(200, 115) )
+    
+    # As we add contents to the window, align them vertically
+    mc.columnLayout( adjustableColumn=True )
+    
+    # Options
+    moItem = mc.checkBox(label='MaintainOffset', v=True)
+    transItem =mc.checkBox(label='Translate', v=True)
+    rotItem = mc.checkBox(label='Rotate', v=True)
+    scaleItem = mc.checkBox(label='Scale', v=True)
+    
+    def commandFunction(a):
+        sel = mc.ls(sl=True)
+        if len(sel) != 2:
+            print 'Select first the parent then the child.'
+            return
+        moCheck = mc.checkBox(moItem, query=True, value=True)
+        transCheck = mc.checkBox(transItem, query=True, value=True)
+        rotCheck = mc.checkBox(rotItem, query=True, value=True)
+        scaleCheck = mc.checkBox(scaleItem, query=True, value=True)
+        matrixConstraint_old(sel[0],sel[1], mo=moCheck, t=transCheck, ro=rotCheck, s=scaleCheck)
+
+    # A button that does nothing
+    mc.button( label='Apply', command=commandFunction)
+    
+    # Close button with a command to delete the UI
+    mc.button( label='Close', command=('mc.deleteUI(\"' + window + '\", window=True)') )
+    
+    # Set its parent to the Maya window (denoted by '..')
+    mc.setParent( '..' )
+    
+    # Show the window that we created (window)
+    mc.showWindow( window )

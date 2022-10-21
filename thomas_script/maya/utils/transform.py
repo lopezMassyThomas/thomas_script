@@ -5,7 +5,7 @@ import maya.cmds as mc
 ###############################=============================================
 
 # Use Selection.
-def orig_Sel(objList=None, preffix='_orig'):
+def orig_Sel(objList=None, suffix='_orig'):
     ''''''
     # Get Current selection
     if objList == None:
@@ -29,7 +29,7 @@ def orig_Sel(objList=None, preffix='_orig'):
         pos_Sel = mc.xform(i, q=True, t=True, ws=True)
         rot_Sel = mc.xform(i, q=True, ro=True, ws=True)
         # Create a group
-        grp = mc.group(em=True, name='{}{}'.format(i, preffix))
+        grp = mc.group(em=True, name='{}{}'.format(i, suffix))
         # Set in place
         mc.xform(grp, a=True, t=pos_Sel, ro=rot_Sel, s=[1, 1, 1])
         # Parent current to orig Group
