@@ -51,9 +51,8 @@ def getBSListAttr():
     return BS_list
 
 
-#---------------------
-#-controllers
-#---------------------
+# controllers
+
 
 def shp_circle(name='circle_ctrl', radius=1):
     ctrl = mc.circle(n=name, nr=(0, 1, 0))
